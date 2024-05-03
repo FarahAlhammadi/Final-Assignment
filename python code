@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import simpledialog, messagebox
 
-# Base class for any person
+# Base class for any person that is involved in the whole system
 class Person:
     def __init__(self, id, name, address, contact_details):
         self.id = id
@@ -9,22 +9,25 @@ class Person:
         self.address = address
         self.contact_details = contact_details
 
-# Specific classes for each entity
+# class for employee, includes some specific attribute
 class Employee(Person):
     def __init__(self, id, name, address, contact_details, job_title, salary):
         super().__init__(id, name, address, contact_details)
         self.job_title = job_title
         self.salary = salary
 
+# class for client, includes some specific attribute like budget
 class Client(Person):
     def __init__(self, id, name, address, contact_details, budget):
         super().__init__(id, name, address, contact_details)
         self.budget = budget
 
+# class for guest, inheritance from Person
 class Guest(Person):
     def __init__(self, id, name, address, contact_details):
         super().__init__(id, name, address, contact_details)
 
+# Class for suppliers about the services they provide
 class Supplier:
     def __init__(self, id, name, service):
         self.id = id
@@ -39,7 +42,7 @@ class Event:
         self.theme = theme
         self.venue = venue_address
 
-
+# Class for venues, includes capacity and guest limits
 class Venue:
     def __init__(self, id, name, address, capacity, minimum_number_of_guests, maximum_number_of_guests):
         self.id = id
@@ -49,6 +52,7 @@ class Venue:
         self.Minimum_number_of_guests = minimum_number_of_guests
         self.Maximum_number_of_guests = maximum_number_of_guests
 
+# Class for caterers, includes menu options and guest capacity handling
 class Caterer:
     def __init__(self,id,name,address, contact_details,menu, minimum_number_of_guests,maximum_number_of_guests ):
         self.id = id
@@ -58,7 +62,7 @@ class Caterer:
         self.Minimum_number_of_guests = minimum_number_of_guests
         self.Maximum_number_of_guests = maximum_number_of_guests
 
-# Management system class
+# Main class to manage the entire system
 class ManagementSystem:
     def __init__(self, master):
         self.master = master
@@ -72,7 +76,7 @@ class ManagementSystem:
         self.venues = {}
         self.caterer = {}
 
-        # Setup GUI for all entities
+        # Initialize GUI for all entities
         self.setup_gui('Employee', self.employees, Employee)
         self.setup_gui('Client', self.clients, Client)
         self.setup_gui('Guest', self.guests, Guest)
@@ -81,6 +85,7 @@ class ManagementSystem:
         self.setup_gui('Venue', self.venues, Venue)
         self.setup_gui('Caterer', self.caterer, Caterer)
 
+# makes widgets for any kind of object.
     def setup_gui(self, entity_name, storage_dict, entity_class):
         tk.Label(self.master, text=f"{entity_name} Management", font=("Arial", 16)).pack()
         tk.Button(self.master, text=f"Add {entity_name}", command=lambda: self.add_entity(entity_name, storage_dict, entity_class)).pack()
@@ -88,6 +93,7 @@ class ManagementSystem:
         tk.Button(self.master, text=f"Modify {entity_name}", command=lambda: self.modify_entity(entity_name, storage_dict, entity_class)).pack()
         tk.Button(self.master, text=f"Display {entity_name}", command=lambda: self.display_entity(entity_name, storage_dict)).pack()
 
+# control the adding of new entities
     def add_entity(self, entity_name, storage_dict, entity_class):
         details = {attr: simpledialog.askstring("Input", f"Enter {entity_name} {attr}:") for attr in entity_class.__init__.__code__.co_varnames[1:]}
         entity = entity_class(**details)
@@ -97,6 +103,7 @@ class ManagementSystem:
         storage_dict[details['id']] = entity
         messagebox.showinfo("Success", f"{entity_name} added successfully!")
 
+# control the deleting of new entities
     def delete_entity(self, entity_name, storage_dict):
         id = simpledialog.askstring("Input", f"Enter {entity_name} ID to delete:")
         if id in storage_dict:
@@ -105,6 +112,7 @@ class ManagementSystem:
         else:
             messagebox.showerror("Error", f"{entity_name} not found.")
 
+# control the existing entities for modifications
     def modify_entity(self, entity_name, storage_dict, entity_class):
         id = simpledialog.askstring("Input", f"Enter {entity_name} ID to modify:")
         if id not in storage_dict:
@@ -115,6 +123,7 @@ class ManagementSystem:
         storage_dict[id] = entity
         messagebox.showinfo("Success", f"{entity_name} details updated successfully!")
 
+# Provides full information about a particular entity
     def display_entity(self, entity_name, storage_dict):
         id = simpledialog.askstring("Input", f"Enter {entity_name} ID to display:")
         if id in storage_dict:
@@ -124,7 +133,7 @@ class ManagementSystem:
         else:
             messagebox.showerror("Error", f"{entity_name} not found.")
 
-# Run the application
+# Run the whole application
 the_root = tk.Tk()
 application = ManagementSystem(the_root)
 the_root.mainloop()
