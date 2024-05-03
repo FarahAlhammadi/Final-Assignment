@@ -57,11 +57,13 @@ class Caterer:
         self.contact_details = contact_details
         self.Minimum_number_of_guests = minimum_number_of_guests
         self.Maximum_number_of_guests = maximum_number_of_guests
+
 # Management system class
 class ManagementSystem:
     def __init__(self, master):
         self.master = master
-        self.master.title("Management System")
+        self.master.title("Event Management System")
+        self.master.config(bg="#8B6C5C")
         self.employees = {}
         self.clients = {}
         self.guests = {}
